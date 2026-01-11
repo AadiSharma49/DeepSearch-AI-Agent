@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createActivityTracker } from "./activity-tracker";
 import { MAX_ITERATIONS } from "./constants";
 import { analyzeFindings, generateReport, generateSearchQueries, processSearchResults, search } from "./research-functions";
