@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import {
   ActivityTracker,
   ResearchFindings,
@@ -15,12 +13,14 @@ import { REPORT_SYSTEM_PROMPT, getReportPrompt } from "./prompts";
    FREE MODE: Planning is skipped
 -------------------------------------------------- */
 export async function generateSearchQueries(
-  _researchState: ResearchState,
+  researchState: ResearchState,
   activityTracker: ActivityTracker
 ) {
+  void researchState;
+
   activityTracker.add(
     "planning",
-    "warning", // ✅ FIX
+    "warning",
     "Research planning skipped (free mode)"
   );
 
@@ -31,13 +31,16 @@ export async function generateSearchQueries(
    FREE MODE: Search is skipped
 -------------------------------------------------- */
 export async function search(
-  _query: string,
-  _researchState: ResearchState,
+  query: string,
+  researchState: ResearchState,
   activityTracker: ActivityTracker
 ): Promise<SearchResult[]> {
+  void query;
+  void researchState;
+
   activityTracker.add(
     "search",
-    "warning", // ✅ FIX
+    "warning",
     "Web search skipped (free mode)"
   );
 
@@ -55,10 +58,14 @@ export async function extractContent() {
    FREE MODE: No processing
 -------------------------------------------------- */
 export async function processSearchResults(
-  _searchResults: SearchResult[],
-  _researchState: ResearchState,
-  _activityTracker: ActivityTracker
+  searchResults: SearchResult[],
+  researchState: ResearchState,
+  activityTracker: ActivityTracker
 ): Promise<ResearchFindings[]> {
+  void searchResults;
+  void researchState;
+  void activityTracker;
+
   return [];
 }
 
@@ -66,14 +73,18 @@ export async function processSearchResults(
    FREE MODE: Analysis is skipped
 -------------------------------------------------- */
 export async function analyzeFindings(
-  _researchState: ResearchState,
-  _currentQueries: string[],
-  _currentIteration: number,
+  researchState: ResearchState,
+  currentQueries: string[],
+  currentIteration: number,
   activityTracker: ActivityTracker
 ) {
+  void researchState;
+  void currentQueries;
+  void currentIteration;
+
   activityTracker.add(
     "analyze",
-    "warning", // ✅ FIX
+    "warning",
     "Analysis skipped (free mode)"
   );
 
