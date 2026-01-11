@@ -1,15 +1,8 @@
+import type { JSONValue, DataStreamWriter } from "ai";
 import { Activity, ResearchState } from "./types";
 
-/**
- * Minimal interface for the AI data stream
- * (only what we actually use)
- */
-type DataStream = {
-  writeData: (data: unknown) => void;
-};
-
 export const createActivityTracker = (
-  dataStream: DataStream,
+  dataStream: DataStreamWriter,
   researchState: ResearchState
 ) => {
   return {
@@ -28,7 +21,7 @@ export const createActivityTracker = (
           completedSteps: researchState.completedSteps,
           tokenUsed: researchState.tokenUsed,
         },
-      });
+      } as JSONValue);
     },
   };
 };

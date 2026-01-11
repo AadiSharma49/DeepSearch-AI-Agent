@@ -2,6 +2,7 @@ import { createDataStreamResponse } from "ai";
 import { ResearchState } from "./types";
 import { deepResearch } from "./main";
 
+
 export async function POST(req: Request) {
   try {
     const { messages } = await req.json();
@@ -16,7 +17,6 @@ export async function POST(req: Request) {
     }
 
     const parsed = JSON.parse(lastMessageContent);
-
     const topic = parsed.topic;
     const clarifications = parsed.clarifications ?? [];
 
@@ -47,7 +47,7 @@ export async function POST(req: Request) {
             ? error.message
             : "Invalid request format",
       }),
-      { status: 200 }
+      { status: 400 }
     );
   }
 }

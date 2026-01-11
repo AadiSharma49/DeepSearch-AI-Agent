@@ -1,3 +1,4 @@
+import type { DataStreamWriter } from "ai";
 import { createActivityTracker } from "./activity-tracker";
 import { MAX_ITERATIONS } from "./constants";
 import {
@@ -7,11 +8,11 @@ import {
   processSearchResults,
   search,
 } from "./research-functions";
-import { ResearchState, SearchResult } from "./types";
+import { ResearchState } from "./types";
 
 export async function deepResearch(
   researchState: ResearchState,
-  dataStream: { writeData: (data: unknown) => void }
+  dataStream: DataStreamWriter
 ) {
   let iteration = 0;
 
@@ -25,26 +26,19 @@ export async function deepResearch(
   let currentQueries = initialQueries.searchQueries;
 
   while (
+    currentQueries &&
     currentQueries.length > 0 &&
-    iteration <= MAX_ITERATIONS
+    iteration < MAX_ITERATIONS
   ) {
     iteration++;
 
-    const searchResults = currentQueries.map((query) =>
-      search(query, researchState, activityTracker)
+    const searchResults = await Promise.all(
+      currentQueries.map((q) =>
+        search(q, researchState, activityTracker)
+      )
     );
 
-    const responses = await Promise.allSettled(searchResults);
-
-    const allSearchResults = responses
-      .filter(
-        (
-          r
-        ): r is PromiseFulfilledResult<SearchResult[]> =>
-          r.status === "fulfilled" && r.value.length > 0
-      )
-      .map((r) => r.value)
-      .flat();
+    const allSearchResults = searchResults.flat();
 
     const newFindings = await processSearchResults(
       allSearchResults,
@@ -63,20 +57,13 @@ export async function deepResearch(
 
     if (analysis.sufficient) break;
 
-    currentQueries = analysis.queries.filter(
-      (q) => !currentQueries.includes(q)
-    );
+    currentQueries = analysis.queries;
   }
 
-  const report = await generateReport(
-    researchState,
-    activityTracker
-  );
+  const report = await generateReport(researchState, activityTracker);
 
   dataStream.writeData({
     type: "report",
     content: report,
   });
-
-  return initialQueries;
 }
