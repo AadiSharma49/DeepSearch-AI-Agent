@@ -1,6 +1,5 @@
 import QnA from "@/components/ui/deep-research/QnA";
 import UserInput from "@/components/ui/deep-research/UserInput";
-import Image from "next/image";
 import ThemeToggle from "@/components/ThemeToggle";
 
 
