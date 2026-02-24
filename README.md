@@ -93,4 +93,3 @@ npm run build
 ---
 ### Author
 #### Aaditya Sharma
-#### Built as an advanced AI + Fullstack portfolio project.
